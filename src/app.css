@@ -1,0 +1,722 @@
+/*
+ * app.css?????
+ * ------------------------------------------------------------
+ * ???? src ??? CSS ??????????
+ * ????????????????????????????
+ */
+
+/* ============================================================
+ * ???Rest Circle ??????????
+ *   - ????????????????????? JS ????
+ *   - ???????? :root ??????????????
+ * ============================================================ */
+
+.rest-circle-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.11);
+  z-index: 1700;
+}
+
+.rest-circle-overlay.is-open {
+  display: flex;
+}
+
+.rest-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rest-aurora-blob {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  filter: blur(100px);
+  opacity: 0.52;
+  transform: translate3d(0, 0, 0) scale(1);
+  animation-play-state: paused;
+}
+
+.rest-circle-overlay.is-open .rest-aurora-blob {
+  animation-play-state: running;
+}
+
+.rest-aurora-blob.b1 {
+  width: 520px;
+  height: 420px;
+  left: -100px;
+  top: -90px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.16), var(--primarySoft) 55%, rgba(250, 247, 240, 0.06) 100%);
+  animation: auroraDriftA 24s ease-in-out infinite alternate;
+}
+
+.rest-aurora-blob.b2 {
+  width: 460px;
+  height: 360px;
+  right: -110px;
+  bottom: -80px;
+  background: radial-gradient(circle at 45% 45%, rgba(255, 107, 74, 0.12), rgba(250, 247, 240, 0.76) 62%, rgba(250, 247, 240, 0.08) 100%);
+  animation: auroraDriftB 30s ease-in-out infinite alternate;
+}
+
+.rest-aurora-blob.b3 {
+  width: 400px;
+  height: 320px;
+  left: 45%;
+  top: 8%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.1), var(--primarySoft) 60%, rgba(250, 247, 240, 0.06) 100%);
+  animation: auroraDriftC 20s ease-in-out infinite alternate;
+}
+
+@keyframes auroraDriftA {
+  0% {
+    transform: translate3d(0px, 0px, 0) scale(0.99);
+  }
+  100% {
+    transform: translate3d(60px, 45px, 0) scale(1.02);
+  }
+}
+
+@keyframes auroraDriftB {
+  0% {
+    transform: translate3d(0px, 0px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-70px, -45px, 0) scale(1.02);
+  }
+}
+
+@keyframes auroraDriftC {
+  0% {
+    transform: translate3d(0px, 0px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-45px, 35px, 0) scale(0.985);
+  }
+}
+
+.rest-circle-modal {
+  position: relative;
+  z-index: 2;
+  width: 320px;
+  min-height: 376px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18px 18px 16px;
+}
+
+.rest-circle-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.rest-circle-close:hover,
+.rest-circle-close:focus-visible {
+  background: var(--primarySoft);
+  color: var(--primary);
+  outline: none;
+}
+
+.rest-circle-panel-wrap {
+  position: relative;
+  width: 248px;
+  height: 248px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rest-finish-ripple {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 248px;
+  height: 248px;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.rest-finish-ripple.r1 {
+  border: 2px solid rgba(255, 107, 74, 0.22);
+}
+
+.rest-finish-ripple.r2 {
+  border: 2px solid rgba(255, 107, 74, 0.16);
+}
+
+.rest-circle-overlay.finish-effect .rest-finish-ripple.r1 {
+  animation: restRippleA 350ms ease-out forwards;
+}
+
+.rest-circle-overlay.finish-effect .rest-finish-ripple.r2 {
+  animation: restRippleB 800ms ease-out 150ms forwards;
+}
+
+@keyframes restRippleA {
+  0% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+}
+
+@keyframes restRippleB {
+  0% {
+    opacity: 0.14;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+}
+
+.rest-circle-panel {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.085);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.rest-ring-svg {
+  width: 224px;
+  height: 224px;
+  transform: rotate(-90deg);
+}
+
+.rest-ring-track {
+  fill: none;
+  stroke: rgba(28, 27, 25, 0.08);
+  stroke-width: 9;
+}
+
+.rest-ring-progress {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 9;
+  stroke-linecap: round;
+  opacity: 0.95;
+  transition: opacity 150ms ease;
+}
+
+.rest-ring-progress.flash {
+  opacity: 1;
+}
+
+.rest-time {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--fg);
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rest-circle-title {
+  margin: 14px 0 6px;
+  color: var(--fg);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: center;
+}
+
+.rest-circle-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  min-height: 42px;
+}
+
+.rest-circle-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.rest-circle-btn {
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.rest-circle-btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.rest-circle-btn.secondary {
+  background: var(--primarySoft);
+  color: var(--primary);
+}
+
+.rest-circle-btn.primary:hover,
+.rest-circle-btn.primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.rest-circle-btn.secondary:hover,
+.rest-circle-btn.secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.16);
+}
+
+.rest-circle-btn.secondary.is-hidden {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rest-aurora-blob {
+    animation: none !important;
+  }
+  .rest-circle-overlay.finish-effect .rest-finish-ripple {
+    animation: none !important;
+    opacity: 0;
+  }
+  .rest-ring-progress {
+    transition: none;
+  }
+}
+
+
+/* ============================================================
+ * ???Rest Overlay ???????????
+ *   - ???????? Overlay?Aurora ????????????
+ *   - ?? reduced-motion ?????????????????
+ * ============================================================ */
+
+.rest-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1800;
+  display: none;
+  background: rgba(0, 0, 0, 0.11);
+}
+
+.rest-overlay.is-open {
+  display: block;
+}
+
+.rest-overlay-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.rest-aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rest-aurora-blob {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  filter: blur(120px);
+  opacity: 0.6;
+  transform: translate3d(0, 0, 0) scale(1);
+  animation-play-state: paused;
+}
+
+.rest-overlay.is-open .rest-aurora-blob {
+  animation-play-state: running;
+}
+
+.rest-aurora-blob.b1 {
+  width: 640px;
+  height: 500px;
+  left: -160px;
+  top: -140px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.2), var(--primarySoft) 52%, rgba(250, 247, 240, 0.1) 100%);
+  animation: restAuroraA 22s ease-in-out infinite alternate;
+}
+
+.rest-aurora-blob.b2 {
+  width: 560px;
+  height: 460px;
+  right: -170px;
+  bottom: -140px;
+  background: radial-gradient(circle at 45% 45%, rgba(255, 107, 74, 0.18), rgba(250, 247, 240, 0.85) 56%, rgba(250, 247, 240, 0.12) 100%);
+  animation: restAuroraB 26s ease-in-out infinite alternate;
+}
+
+.rest-aurora-blob.b3 {
+  width: 460px;
+  height: 380px;
+  left: 38%;
+  top: -90px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.16), var(--primarySoft) 60%, rgba(250, 247, 240, 0.1) 100%);
+  animation: restAuroraC 20s ease-in-out infinite alternate;
+}
+
+.rest-aurora-blob.b4 {
+  width: 500px;
+  height: 420px;
+  left: 15%;
+  bottom: -170px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.14), rgba(250, 247, 240, 0.78) 62%, rgba(250, 247, 240, 0.1) 100%);
+  animation: restAuroraD 24s ease-in-out infinite alternate;
+}
+
+.rest-light-sweep {
+  position: absolute;
+  inset: -35%;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(255, 107, 74, 0) 0deg,
+      rgba(255, 107, 74, 0.12) 55deg,
+      rgba(255, 255, 255, 0.1) 72deg,
+      rgba(255, 107, 74, 0.08) 92deg,
+      rgba(255, 107, 74, 0) 130deg,
+      rgba(255, 107, 74, 0) 360deg
+    );
+  filter: blur(16px);
+  opacity: 0.55;
+  transform-origin: center center;
+  animation: restSweep 12s linear infinite;
+}
+
+.rest-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(28, 27, 25, 0.35) 1px, transparent 0);
+  background-size: 3px 3px;
+}
+
+@keyframes restAuroraA {
+  0% { transform: translate3d(0px, 0px, 0) scale(0.99); }
+  100% { transform: translate3d(110px, 70px, 0) scale(1.03); }
+}
+
+@keyframes restAuroraB {
+  0% { transform: translate3d(0px, 0px, 0) scale(1); }
+  100% { transform: translate3d(-120px, -70px, 0) scale(1.02); }
+}
+
+@keyframes restAuroraC {
+  0% { transform: translate3d(0px, 0px, 0) scale(1); }
+  100% { transform: translate3d(80px, 90px, 0) scale(0.99); }
+}
+
+@keyframes restAuroraD {
+  0% { transform: translate3d(0px, 0px, 0) scale(1.01); }
+  100% { transform: translate3d(-90px, -60px, 0) scale(0.98); }
+}
+
+@keyframes restSweep {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(360deg) scale(1.01); }
+}
+
+.rest-overlay-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 360px minmax(260px, 1fr);
+  align-items: center;
+  gap: 28px;
+  width: min(1220px, calc(100vw - 72px));
+  margin: 0 auto;
+}
+
+.rest-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(8px);
+  padding: 16px;
+}
+
+.rest-reflection h4,
+.rest-suggest h4 {
+  margin: 0 0 10px;
+  color: var(--fg);
+  font-size: 15px;
+}
+
+.rest-reflection p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rest-reflection p:last-child {
+  margin-bottom: 0;
+}
+
+.rest-suggest ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rest-suggest li {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+
+.rest-suggest li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+}
+
+.rest-center {
+  position: relative;
+  text-align: center;
+}
+
+.rest-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.rest-close:hover,
+.rest-close:focus-visible {
+  outline: none;
+  background: var(--primarySoft);
+  color: var(--primary);
+}
+
+.rest-ring-wrap {
+  position: relative;
+  width: 316px;
+  height: 316px;
+  margin: 0 auto;
+}
+
+.rest-ring-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 18px rgba(255, 107, 74, 0.08);
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.rest-ring-svg {
+  width: 316px;
+  height: 316px;
+  transform: rotate(-90deg);
+}
+
+.rest-ring-track {
+  fill: none;
+  stroke: rgba(28, 27, 25, 0.08);
+  stroke-width: 11;
+}
+
+.rest-ring-progress {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 11;
+  stroke-linecap: round;
+  opacity: 0.94;
+  transition: opacity 180ms ease;
+}
+
+.rest-ring-progress.is-flash {
+  opacity: 1;
+}
+
+.rest-ring-core {
+  position: absolute;
+  inset: 48px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rest-status {
+  color: var(--fg);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.rest-time {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rest-ripple {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(1000vmin, 2000px);
+  height: min(1000vmin, 2000px);
+  border-radius: var(--radius-pill);
+  transform: translate(-50%, -50%) scale(0.28);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.rest-ripple.r1 {
+  border: 3px solid rgba(255, 107, 74, 0.30);
+  filter: blur(1.5px);
+}
+
+.rest-ripple.r2 {
+  border: 3px solid rgba(255, 107, 74, 0.22);
+  filter: blur(3px);
+}
+
+.rest-overlay.is-finished-effect .rest-ripple.r1 {
+  animation: restWaveA 620ms cubic-bezier(.22, .61, .36, 1) forwards;
+}
+
+.rest-overlay.is-finished-effect .rest-ripple.r2 {
+  animation: restWaveB 1420ms cubic-bezier(.16, .84, .34, 1) 120ms forwards;
+}
+
+@keyframes restWaveA {
+  0% {
+    opacity: 0.30;
+    transform: translate(-50%, -50%) scale(0.28);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+}
+
+@keyframes restWaveB {
+  0% {
+    opacity: 0.20;
+    transform: translate(-50%, -50%) scale(0.28);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+}
+
+.rest-actions {
+  margin-top: 16px;
+  display: inline-flex;
+  gap: 10px;
+}
+
+.rest-btn {
+  height: 42px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.rest-btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.rest-btn.secondary {
+  background: var(--primarySoft);
+  color: var(--primary);
+}
+
+.rest-btn.primary:hover,
+.rest-btn.primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.rest-btn.secondary:hover,
+.rest-btn.secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rest-aurora-blob,
+  .rest-light-sweep {
+    animation: none !important;
+  }
+  .rest-overlay.is-finished-effect .rest-ripple {
+    animation: none !important;
+    opacity: 0;
+  }
+  .rest-ring-progress {
+    transition: none;
+  }
+}
+
+

@@ -1,0 +1,549 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>番茄钟完成 - 温暖风 + 打勾动效</title>
+  <style>
+    :root {
+      --bg: #FAF7F0;
+      --fg: #1c1b19;
+      --muted: rgba(28, 27, 25, .62);
+
+      --primary: #ff6b4a;
+      --primarySoft: rgba(255, 107, 74, .14);
+
+      --card: #ffffff;
+      --border: rgba(28, 27, 25, .12);
+      --shadow: 0 18px 40px rgba(0, 0, 0, .10);
+
+      --container-w: 960px;
+      --card-w: 760px;
+
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+
+      --focus: rgba(255, 107, 74, .22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(900px 520px at 50% 15%, rgba(255, 107, 74, .12), transparent 60%),
+        var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      width: var(--container-w);
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      gap: 18px;
+    }
+
+    .badge {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-pill);
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+    }
+
+    .badge .pill {
+      background: var(--primarySoft);
+      border: 1px solid rgba(255, 107, 74, .24);
+      color: #a4331f;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+    }
+
+    .hero {
+      width: var(--card-w);
+      text-align: center;
+      transform: translateY(-8px);
+      position: relative;
+    }
+
+    .checkRow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .checkWrap {
+      width: 76px;
+      height: 76px;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .08));
+    }
+
+    .ringBase {
+      stroke: rgba(28, 27, 25, .12);
+      stroke-width: 6;
+      fill: none;
+    }
+
+    .ringActive {
+      stroke: var(--primary);
+      stroke-width: 6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 240;
+      stroke-dashoffset: 240;
+    }
+
+    .tick {
+      stroke: var(--primary);
+      stroke-width: 7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 80;
+      stroke-dashoffset: 80;
+    }
+
+    .checkWrap.animate .ringActive {
+      animation: drawRing .80s ease-out forwards;
+    }
+
+    .checkWrap.animate .tick {
+      animation: drawTick .30s ease-out .72s forwards;
+    }
+
+    @keyframes drawRing {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes drawTick {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 50px;
+      line-height: 1.1;
+      letter-spacing: .2px;
+    }
+
+    .encourage {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .fadeInAfter {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: heroIn .25s ease-out .90s forwards;
+    }
+
+    @keyframes heroIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      width: var(--card-w);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 20px 20px 16px;
+    }
+
+    .cardHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .cardHeader h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 0 12px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(28, 27, 25, .35);
+    }
+
+    input[type="text"]:focus {
+      border-color: rgba(255, 107, 74, .45);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+
+    .moods {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .mood {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      user-select: none;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      font-size: 14px;
+    }
+
+    .mood:hover {
+      transform: translateY(-1px);
+    }
+
+    .mood.active {
+      border-color: rgba(255, 107, 74, .35);
+      background: rgba(255, 107, 74, .10);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    .btn {
+      height: 44px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform .08s ease, opacity .15s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btnGhost {
+      background: #fff;
+      border-color: var(--border);
+      color: var(--fg);
+    }
+
+    .btnPrimary {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .btn:hover {
+      opacity: .92;
+    }
+
+    /* =========================
+       [新增] 导出格式选择器样式（JSON / CSV）
+       你不想要这个控件，也可以直接删掉 HTML 里 select 那一段
+       ========================= */
+    .exportCtl {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .exportCtl select {
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 0 10px;
+      outline: none;
+      font-size: 13px;
+      color: var(--fg);
+    }
+
+    .exportCtl select:focus {
+      border-color: rgba(255, 107, 74, .45);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+
+    .foot {
+      width: var(--card-w);
+      text-align: right;
+      color: rgba(28, 27, 25, .45);
+      font-size: 12px;
+      transform: translateY(-4px);
+    }
+  </style>
+  <link rel="stylesheet" href="./src/app.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="badge">
+      <span style="font-size:16px;">🍅</span>
+      <span>完成一轮</span>
+      <span class="pill">+1</span>
+    </div>
+
+    <section class="hero" aria-label="完成提示">
+      <div class="checkRow">
+        <svg class="checkWrap" id="checkSvg" viewBox="0 0 100 100" role="img" aria-label="完成">
+          <circle class="ringBase" cx="50" cy="50" r="38"></circle>
+          <circle class="ringActive" cx="50" cy="50" r="38"></circle>
+          <path class="tick" d="M30 52 L45 66 L72 38"></path>
+        </svg>
+
+        <div>
+          <h1 class="fadeInAfter">完成 50 分钟专注</h1>
+          <p class="encourage fadeInAfter">你已经专注 50 分钟了，继续加油吧！</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="快速复盘">
+      <div class="cardHeader">
+        <h2>快速复盘（30 秒）</h2>
+        <div class="hint">写一句话就够了</div>
+      </div>
+
+      <label for="done">我刚刚推进了什么？</label>
+      <input id="done" type="text" placeholder="例：把第 2 节看完并写了笔记" />
+
+      <label for="next">下一轮最重要的一步是？</label>
+      <input id="next" type="text" placeholder="例：做 10 道题并订正" />
+
+      <label>现在感觉</label>
+      <div class="moods" role="group" aria-label="状态选择">
+        <div class="mood" data-value="精神不错" data-feel="good">🙂 精神不错</div>
+        <div class="mood" data-value="还行" data-feel="ok">😐 还行</div>
+        <div class="mood" data-value="有点累" data-feel="tired">😮‍💨 有点累</div>
+      </div>
+
+      <div class="actions">
+        <!-- =========================
+             [新增] 导出格式选择器（JSON / CSV）
+             你要找“下载文件功能”相关 UI，就看这段
+             ========================= -->
+        <div class="exportCtl" title="选择点击保存后下载的文件格式">
+          <span>导出</span>
+          <select id="exportFormat">
+            <option value="json" selected>JSON</option>
+            <option value="csv">CSV</option>
+          </select>
+        </div>
+
+        <button class="btn btnGhost" id="btnReplay">重播打勾动效</button>
+        <button class="btn btnGhost" id="btnNext">直接开始下一轮</button>
+        <button class="btn btnPrimary" id="btnSave" data-action="start-rest">保存并开始休息</button>
+      </div>
+    </section>
+
+    <div class="foot">保存后会自动下载文件到浏览器默认下载目录</div>
+  </div>
+
+  <script>
+    // 1) 打勾动效：重播
+    const checkSvg = document.getElementById("checkSvg");
+    function playCheckAnimation() {
+      checkSvg.classList.remove("animate");
+      void checkSvg.offsetWidth;
+      checkSvg.classList.add("animate");
+    }
+    playCheckAnimation();
+    document.getElementById("btnReplay").addEventListener("click", playCheckAnimation);
+
+    // 2) 状态选择
+    const moods = document.querySelectorAll(".mood");
+    let currentMood = "";
+    moods.forEach(m => {
+      m.addEventListener("click", () => {
+        moods.forEach(x => x.classList.remove("active"));
+        m.classList.add("active");
+        currentMood = m.dataset.value;
+      });
+    });
+
+    // 3) 收集表单数据
+    function collectData() {
+      return {
+        at: new Date().toISOString(),
+        done: document.getElementById("done").value.trim(),
+        next: document.getElementById("next").value.trim(),
+        mood: currentMood
+      };
+    }
+
+    // =========================
+    // [新增功能] 保存后自动下载文件（JSON/CSV）
+    // 你要找“下载文件功能”相关代码，就看这块 START/END
+    // =========================
+    // ===== EXPORT FEATURE START =====
+
+    // 生成一个更好辨认的文件名：pomodoro_YYYY-MM-DD_HHMMSS.json/csv
+    function makeFilename(ext) {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      const mm = pad(d.getMonth() + 1);
+      const dd = pad(d.getDate());
+      const hh = pad(d.getHours());
+      const mi = pad(d.getMinutes());
+      const ss = pad(d.getSeconds());
+      return `pomodoro_${yyyy}-${mm}-${dd}_${hh}${mi}${ss}.${ext}`;
+    }
+
+    // 通用下载：把文本内容变成 Blob，然后用 <a download> 触发下载
+    function downloadTextFile({ filename, text, mimeType }) {
+      const blob = new Blob([text], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+
+      // 这行在某些浏览器需要（更保险），让它成为可点击节点
+      document.body.appendChild(a);
+      a.click();
+
+      // 清理
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // 把一条记录转成 CSV（一行）
+    // 注意：CSV 里如果有逗号/引号/换行，要做转义
+    function csvEscape(value) {
+      const s = String(value ?? "");
+      // 如果包含特殊字符，就用双引号包起来，并把内部的 " 变成 ""
+      if (/[",\n\r]/.test(s)) {
+        return `"${s.replace(/"/g, '""')}"`;
+      }
+      return s;
+    }
+
+    function recordToCSV(record) {
+      // 这里定义 CSV 的列顺序（你想加字段就改这里）
+      const headers = ["at", "done", "next", "mood"];
+      const headerLine = headers.join(",");
+
+      const rowLine = headers.map(k => csvEscape(record[k])).join(",");
+      // 返回“表头 + 一行数据”
+      return headerLine + "\n" + rowLine + "\n";
+    }
+
+    // ===== EXPORT FEATURE END =====
+    // =========================
+
+    // 4) 点击保存：本地存一份 + 自动下载（你也可以只保留下载，不存 localStorage）
+    document.getElementById("btnSave").addEventListener("click", () => {
+      const payload = collectData();
+
+      // （可选）仍然保留 localStorage：方便你在页面里调试/回看
+      const key = "pomodoro_reviews";
+      const existing = JSON.parse(localStorage.getItem(key) || "[]");
+      existing.push(payload);
+      localStorage.setItem(key, JSON.stringify(existing));
+
+      // =========================
+      // [新增] 保存后自动下载（根据下拉框 JSON/CSV）
+      // =========================
+      const format = document.getElementById("exportFormat").value;
+
+      if (format === "json") {
+        const filename = makeFilename("json");
+        const text = JSON.stringify(payload, null, 2); // 格式化缩进，便于阅读
+        downloadTextFile({
+          filename,
+          text,
+          mimeType: "application/json;charset=utf-8"
+        });
+      } else {
+        const filename = makeFilename("csv");
+        const text = recordToCSV(payload);
+        downloadTextFile({
+          filename,
+          text,
+          mimeType: "text/csv;charset=utf-8"
+        });
+      }
+
+      console.log("已保存并下载导出文件");
+      console.log("Saved:", payload);
+    });
+
+    document.getElementById("btnNext").addEventListener("click", () => {
+      alert("准备开始下一轮 🚀");
+    });
+
+    // 5) 小优化：打开自动聚焦
+    document.getElementById("done").focus();
+  </script>
+  <script src="./src/app.js"></script>
+  <script>
+    if (window.initFeelToast) {
+      window.initFeelToast();
+    }
+    if (window.initRestOverlay) {
+      window.initRestOverlay();
+    }
+  </script>
+</body>
+
+</html>

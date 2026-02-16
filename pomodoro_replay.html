@@ -1,0 +1,595 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>番茄钟</title>
+  <link rel="icon" href="./番茄.svg">
+  <style>
+    /* 去除常见标签默认的 margin 和 padding */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 设置网页统一的字体大小、行高、字体系列相关属性 */
+    body {
+      font: 16px/1 "Microsoft Yahei",
+        "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+      color: #1c1b19;
+      width: 100%;
+      height: 100vh;
+      /* 有宽高（占满整个视口）子元素才能有宽高 */
+      background:
+        radial-gradient(900px 520px at 50% 15%, rgba(255, 107, 74, .12), transparent 60%),
+        #FAF7F0;
+      /* 双层渐变背景图 */
+      /* 第一层用渐变，第2层加底色 */
+      /* 属性含义：
+    1. 900px 520px ： 渐变半径为900px，高度为520px（默认椭圆形）
+    2. at 50% 15% ： 渐变中心位于水平居中、垂直偏上15%
+    3. rgba(255,107,74,.12)  transparent 60%
+    从rgba(255,107,74,.12)（半透明橙色）过渡到transparent 60%（60%位置变为完全透明） 
+  */
+    }
+
+    /* 去除列表默认样式 */
+    ul,
+    ol {
+      list-style: none;
+    }
+
+    /* 去除默认的倾斜效果 */
+    em,
+    i {
+      font-style: normal;
+    }
+
+    /* 去除a标签默认下划线，并设置默认文字颜色 */
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    /* 设置img的垂直对齐方式为居中对齐，去除img默认下间隙 */
+    img {
+      vertical-align: middle;
+    }
+
+    /* 去除input默认样式 */
+    input {
+      border: none;
+      outline: none;
+      color: #333;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 400;
+    }
+
+    /* 初始化 */
+    .w {
+      width: 760px;
+      height: 100%;
+      margin: 0 auto;
+      /* 有宽高子元素才能有宽高 */
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      position: relative;
+    }
+
+    .zz {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 88px;
+      width: 484px;
+    }
+
+    .zz .svg {
+      height: 76px;
+      width: 76px;
+      position: relative;
+      /* background-color: red; */
+    }
+
+    .zz .zhi {
+      height: 88px;
+      width: 398px;
+      /* background-color: blue; */
+    }
+
+    .zz .zhi .big {
+      font-size: 50px;
+      /* 加粗 */
+      font-weight: bold;
+    }
+
+    .zz .zhi .small {
+      font-size: 18px;
+      color: rgba(28, 27, 25, .62);
+      /* 文本居中对齐 */
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .card {
+      width: 760px;
+      background-color: #fff;
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .10);
+      padding: 20px 20px 16px;
+    }
+
+    .fp {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fp .left {
+      font-size: 18px;
+    }
+
+    .fp .right {
+      font-size: 13px;
+      color: rgba(28, 27, 25, .62);
+    }
+
+    .wenbenkuang p {
+      color: #1C1b199E;
+      font-size: 13px;
+      margin: 14px 0 8px;
+    }
+
+    .wenbenkuang input {
+      width: 720px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(28, 27, 25, .12);
+      padding: 0 16px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(28, 27, 25, .35);
+    }
+
+    .xianzaiganjue p {
+      color: #1C1b199E;
+      font-size: 13px;
+      margin: 14px 0 8px;
+    }
+
+    .xianzaiganjue .bottom {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .xianzaiganjue .bottom .label {
+      height: 40px;
+      border-radius: 20px;
+      /* 边框 */
+      border: 1px solid rgba(28, 27, 25, .35);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      /* 悬浮鼠标指针会变成手形图标 */
+      cursor: pointer;
+      transition: all .2s ease;
+      /* 过渡属性： 过渡范围 过渡时间长度 过渡速度曲线比如慢快慢，匀速 */
+    }
+
+    .xianzaiganjue .bottom .label:hover {
+      transform: translateY(-1px);
+      /* transform可以让元素在2D或3D空间内进行变换 */
+      /* 比如平移旋转 */
+    }
+
+    .xianzaiganjue .bottom .label:has(input:checked) {
+      /* has 伪元素选择器作用：选中父元素下的子元素 */
+      /* 具体就是选中了已经被点击的input元素 */
+      /* 这样就可以实现让属性变化直到下次点击其他按钮 */
+      /* checked只能选中被选中的表单控件元素 */
+      border-color: rgba(255, 107, 74, .35);
+      background: rgba(255, 107, 74, .10);
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    .xianzaiganjue .bottom .label span {
+      display: flex;
+      align-items: center;
+      color: rgba(16, 16, 14, 1.5);
+      font-size: 13px;
+      gap: 5px;
+    }
+
+    .xianzaiganjue .bottom .label span img {
+      width: 16px;
+      height: 16px;
+    }
+
+    .xz {
+      display: flex;
+      /* 右对齐 */
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .xz .label2 {
+      height: 40px;
+      border-radius: 10px;
+      /* 边框 */
+      border: 1px solid rgba(28, 27, 25, .35);
+      padding: 0 16px;
+      /* 悬浮鼠标指针会变成手形图标 */
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all .2s ease;
+    }
+
+    .xz .label2:hover {
+      transform: translateY(1px);
+    }
+
+    .xz .label2 span {
+      color: rgba(16, 16, 14, 1.5);
+      font-size: 13px;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    /* 最后一个 */
+    .xz .label2:last-child {
+      background-color: #ff6b4a;
+    }
+
+    .xz .label2:last-child span {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .badge {
+      position: absolute;
+      top: 40px;
+      left: -100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(28, 27, 25, .12);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .10);
+      font-size: 14px;
+    }
+
+    .badge img {
+      height: 21px;
+      width: 21px;
+    }
+
+    .badge .pill {
+      background: rgba(255, 107, 74, .14);
+      border: 1px solid rgba(255, 107, 74, .24);
+      color: #A4331F;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    /* 模态弹窗样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .5);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      width: 320px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      color: #1c1b19;
+      margin: 0;
+    }
+
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(28, 27, 25, .1);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      color: rgba(28, 27, 25, .6);
+      transition: all .2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(28, 27, 25, .2);
+      transform: scale(1.1);
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+    }
+
+    .modal-body label {
+      display: block;
+      font-size: 14px;
+      color: #1c1b19;
+      margin-bottom: 8px;
+    }
+
+    .modal-body input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid rgba(28, 27, 25, .2);
+      border-radius: 10px;
+      padding: 0 16px;
+      font-size: 16px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .modal-footer button {
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      padding: 0 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .modal-footer .btn-cancel {
+      background: rgba(28, 27, 25, .1);
+      color: #1c1b19;
+    }
+
+    .modal-footer .btn-cancel:hover {
+      background: rgba(28, 27, 25, .15);
+    }
+
+    .modal-footer .btn-confirm {
+      background: #ff6b4a;
+      color: #fff;
+    }
+
+    .modal-footer .btn-confirm:hover {
+      background: #e55a3b;
+      transform: translateY(-1px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* 打勾动画部分 */
+    /* 动画容器 */
+    .animation-container {
+      width: 76px;
+      height: 76px;
+      overflow: hidden;
+      /* 限制容器内部内容不溢出 */
+      position: relative;
+      /* border: 1px solid #ccc; */
+    }
+
+    /* 使 checkWrap 在容器内定位 */
+    .checkWrap {
+      position: relative;
+      width: 76px;
+      /* 设置固定宽度 */
+      height: 76px;
+      /* 设置固定高度 */
+    }
+
+    /* SVG元素基础样式 */
+    .ringBase {
+      fill: none;
+      stroke: #FF6B4A;
+      stroke-width: 4;
+    }
+
+    .ringActive {
+      fill: none;
+      stroke: #FF6B4A;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 239;
+      /* 圆的周长：2 * π * r ≈ 2 * 3.14 * 38 ≈ 239 */
+      stroke-dashoffset: 239;
+      /* 初始偏移量等于周长，使线条不可见 */
+    }
+
+    .tick {
+      fill: none;
+      stroke: #FF6B4A;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 40;
+      /* 路径长度估算 */
+      stroke-dashoffset: 40;
+      /* 初始偏移量等于路径长度，使线条不可见 */
+    }
+
+    /* 动画关键帧 */
+    @keyframes drawRing {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes drawTick {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* 动画触发 */
+    .checkWrap.animate .ringActive {
+      animation: drawRing 1s ease-out forwards;
+    }
+
+    .checkWrap.animate .tick {
+      animation: drawTick 0.3s ease-out 0.72s forwards;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="w">
+    <div class="zz">
+      <div class="svg">
+        <div class="animation-container">
+          <svg class="checkWrap" id="checkSvg" viewBox="0 0 100 100" role="img" aria-label="完成">
+            <circle class="ringBase" cx="50" cy="50" r="38"></circle>
+            <circle class="ringActive" cx="50" cy="50" r="38"></circle>
+            <path class="tick" d="M35 50 L45 60 L65 35"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="zhi">
+        <div class="big">完成 <span class="time-text" id="mainTime">50</span> 分钟专注</div>
+        <div class="small">你已经专注 <span class="time-text" id="subTime">50</span> 分钟了，继续加油吧！</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="fp">
+        <div class="left">快速复盘（30 秒）</div>
+        <div class="right">写一句话就够了</div>
+      </div>
+      <div class="wenbenkuang">
+        <p>我刚刚推进了什么</p>
+        <input type="text" placeholder="例：完成了树的模拟复现">
+      </div>
+      <div class="wenbenkuang">
+        <p>下一轮最重要的一步是</p>
+        <input type="text" placeholder="例：开始番茄钟前端项目的复现">
+      </div>
+      <div class="xianzaiganjue">
+        <p>现在感觉</p>
+        <div class="bottom">
+          <label class="label">
+            <input type="radio" name="nowFeel" id="">
+            <span><img src="./grinning_squinting_face_color.svg" alt="精神不错">精神不错</span>
+          </label>
+          <label class="label">
+            <input type="radio" name="nowFeel" id="">
+            <span><img src="./expressionless_face_color.svg" alt="还行">还行</span>
+          </label>
+          <label class="label">
+            <input type="radio" name="nowFeel" id="">
+            <span><img src="./yawning_face_color.svg" alt="有点累">有点累</span>
+          </label>
+        </div>
+      </div>
+      <div class="xz">
+        <label class="label2">
+          <input type="checkbox" id="replay">
+          <span>重播打勾动效</span>
+        </label>
+        <label class="label2">
+          <input type="checkbox" id="next_time">
+          <span>直接开始下一轮</span>
+        </label>
+        <label class="label2">
+          <input type="checkbox" id="save">
+          <span>保存并开始休息</span>
+        </label>
+      </div>
+      <div class="badge">
+        <span><img src="./番茄.svg" alt="番茄"></span>
+        <span>完成一轮</span>
+        <span class="pill">+1</span>
+      </div>
+    </div>
+    
+  </div>
+  <script>
+    // 页面加载完成后自动播放动画
+    window.addEventListener('load', function () {
+      const checkSvg = document.getElementById("checkSvg");
+      checkSvg.classList.add("animate"); // 添加类名触发动画
+      
+    });
+
+    // 点击重播按钮时重新播放动画
+    document.getElementById("replay").addEventListener("click", function () {
+      const checkSvg = document.getElementById("checkSvg");
+      // 重置动画状态
+      checkSvg.classList.remove("animate");
+      // 强制重排
+      void checkSvg.offsetWidth;
+      // 添加类名触发动画
+      checkSvg.classList.add("animate");
+    });
+
+  </script>
+</body>
+
+</html>
