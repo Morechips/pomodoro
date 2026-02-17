@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>番茄钟完成 - 温暖风 + 打勾动效</title>
+  <meta name="pomodoro-open-sound" content="on" />
+  <title>番茄钟完成</title>
   <style>
     :root {
       --bg: #FAF7F0;
@@ -331,7 +332,7 @@
       transform: translateY(-4px);
     }
   </style>
-  <link rel="stylesheet" href="./src/app.css" />
+  <link rel="stylesheet" href="./src/rest-overlay.css" />
 </head>
 
 <body>
@@ -351,8 +352,8 @@
         </svg>
 
         <div>
-          <h1 class="fadeInAfter">完成 50 分钟专注</h1>
-          <p class="encourage fadeInAfter">你已经专注 50 分钟了，继续加油吧！</p>
+          <h1 class="fadeInAfter">完成 25 分钟专注</h1>
+          <p class="encourage fadeInAfter">你已经专注 25 分钟了，继续加油吧！</p>
         </div>
       </div>
     </section>
@@ -536,14 +537,7 @@
     document.getElementById("done").focus();
   </script>
   <script src="./src/app.js"></script>
-  <script>
-    if (window.initFeelToast) {
-      window.initFeelToast();
-    }
-    if (window.initRestOverlay) {
-      window.initRestOverlay();
-    }
-  </script>
+  <script src="./src/app-init.js"></script>
 </body>
 
 </html>

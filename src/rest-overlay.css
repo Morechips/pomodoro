@@ -1,327 +1,9 @@
-/*
- * app.css?????
+/* ============================================================
+ * 模块：Rest Overlay 样式
  * ------------------------------------------------------------
- * ???? src ??? CSS ??????????
- * ????????????????????????????
- */
-
-/* ============================================================
- * ???Rest Circle ??????????
- *   - ????????????????????? JS ????
- *   - ???????? :root ??????????????
- * ============================================================ */
-
-.rest-circle-overlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.11);
-  z-index: 1700;
-}
-
-.rest-circle-overlay.is-open {
-  display: flex;
-}
-
-.rest-aurora {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.rest-aurora-blob {
-  position: absolute;
-  border-radius: var(--radius-pill);
-  filter: blur(100px);
-  opacity: 0.52;
-  transform: translate3d(0, 0, 0) scale(1);
-  animation-play-state: paused;
-}
-
-.rest-circle-overlay.is-open .rest-aurora-blob {
-  animation-play-state: running;
-}
-
-.rest-aurora-blob.b1 {
-  width: 520px;
-  height: 420px;
-  left: -100px;
-  top: -90px;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.16), var(--primarySoft) 55%, rgba(250, 247, 240, 0.06) 100%);
-  animation: auroraDriftA 24s ease-in-out infinite alternate;
-}
-
-.rest-aurora-blob.b2 {
-  width: 460px;
-  height: 360px;
-  right: -110px;
-  bottom: -80px;
-  background: radial-gradient(circle at 45% 45%, rgba(255, 107, 74, 0.12), rgba(250, 247, 240, 0.76) 62%, rgba(250, 247, 240, 0.08) 100%);
-  animation: auroraDriftB 30s ease-in-out infinite alternate;
-}
-
-.rest-aurora-blob.b3 {
-  width: 400px;
-  height: 320px;
-  left: 45%;
-  top: 8%;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 74, 0.1), var(--primarySoft) 60%, rgba(250, 247, 240, 0.06) 100%);
-  animation: auroraDriftC 20s ease-in-out infinite alternate;
-}
-
-@keyframes auroraDriftA {
-  0% {
-    transform: translate3d(0px, 0px, 0) scale(0.99);
-  }
-  100% {
-    transform: translate3d(60px, 45px, 0) scale(1.02);
-  }
-}
-
-@keyframes auroraDriftB {
-  0% {
-    transform: translate3d(0px, 0px, 0) scale(1);
-  }
-  100% {
-    transform: translate3d(-70px, -45px, 0) scale(1.02);
-  }
-}
-
-@keyframes auroraDriftC {
-  0% {
-    transform: translate3d(0px, 0px, 0) scale(1);
-  }
-  100% {
-    transform: translate3d(-45px, 35px, 0) scale(0.985);
-  }
-}
-
-.rest-circle-modal {
-  position: relative;
-  z-index: 2;
-  width: 320px;
-  min-height: 376px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 18px 18px 16px;
-}
-
-.rest-circle-close {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 4;
-}
-
-.rest-circle-close:hover,
-.rest-circle-close:focus-visible {
-  background: var(--primarySoft);
-  color: var(--primary);
-  outline: none;
-}
-
-.rest-circle-panel-wrap {
-  position: relative;
-  width: 248px;
-  height: 248px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rest-finish-ripple {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 248px;
-  height: 248px;
-  transform: translate(-50%, -50%) scale(1);
-  border-radius: var(--radius-pill);
-  pointer-events: none;
-  opacity: 0;
-  z-index: 1;
-}
-
-.rest-finish-ripple.r1 {
-  border: 2px solid rgba(255, 107, 74, 0.22);
-}
-
-.rest-finish-ripple.r2 {
-  border: 2px solid rgba(255, 107, 74, 0.16);
-}
-
-.rest-circle-overlay.finish-effect .rest-finish-ripple.r1 {
-  animation: restRippleA 350ms ease-out forwards;
-}
-
-.rest-circle-overlay.finish-effect .rest-finish-ripple.r2 {
-  animation: restRippleB 800ms ease-out 150ms forwards;
-}
-
-@keyframes restRippleA {
-  0% {
-    opacity: 0.2;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.18);
-  }
-}
-
-@keyframes restRippleB {
-  0% {
-    opacity: 0.14;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.35);
-  }
-}
-
-.rest-circle-panel {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--card);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.085);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.rest-ring-svg {
-  width: 224px;
-  height: 224px;
-  transform: rotate(-90deg);
-}
-
-.rest-ring-track {
-  fill: none;
-  stroke: rgba(28, 27, 25, 0.08);
-  stroke-width: 9;
-}
-
-.rest-ring-progress {
-  fill: none;
-  stroke: var(--primary);
-  stroke-width: 9;
-  stroke-linecap: round;
-  opacity: 0.95;
-  transition: opacity 150ms ease;
-}
-
-.rest-ring-progress.flash {
-  opacity: 1;
-}
-
-.rest-time {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--fg);
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  font-variant-numeric: tabular-nums;
-}
-
-.rest-circle-title {
-  margin: 14px 0 6px;
-  color: var(--fg);
-  font-size: 22px;
-  line-height: 1.2;
-  font-weight: 700;
-  text-align: center;
-}
-
-.rest-circle-subtitle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
-  text-align: center;
-  min-height: 42px;
-}
-
-.rest-circle-actions {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-}
-
-.rest-circle-btn {
-  height: 40px;
-  padding: 0 14px;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.rest-circle-btn.primary {
-  background: var(--primary);
-  color: #fff;
-}
-
-.rest-circle-btn.secondary {
-  background: var(--primarySoft);
-  color: var(--primary);
-}
-
-.rest-circle-btn.primary:hover,
-.rest-circle-btn.primary:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--focus);
-}
-
-.rest-circle-btn.secondary:hover,
-.rest-circle-btn.secondary:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.16);
-}
-
-.rest-circle-btn.secondary.is-hidden {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rest-aurora-blob {
-    animation: none !important;
-  }
-  .rest-circle-overlay.finish-effect .rest-finish-ripple {
-    animation: none !important;
-    opacity: 0;
-  }
-  .rest-ring-progress {
-    transition: none;
-  }
-}
-
-
-/* ============================================================
- * ???Rest Overlay ???????????
- *   - ???????? Overlay?Aurora ????????????
- *   - ?? reduced-motion ?????????????????
+ * 说明：
+ * - 仅包含全屏休息页的样式，避免与旧 rest-circle 样式互相覆盖
+ * - 保持页面原有主题变量（:root）体系
  * ============================================================ */
 
 .rest-overlay {
@@ -647,25 +329,13 @@
 }
 
 @keyframes restWaveA {
-  0% {
-    opacity: 0.30;
-    transform: translate(-50%, -50%) scale(0.28);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.02);
-  }
+  0% { opacity: 0.30; transform: translate(-50%, -50%) scale(0.28); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.02); }
 }
 
 @keyframes restWaveB {
-  0% {
-    opacity: 0.20;
-    transform: translate(-50%, -50%) scale(0.28);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.18);
-  }
+  0% { opacity: 0.20; transform: translate(-50%, -50%) scale(0.28); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.18); }
 }
 
 .rest-actions {
@@ -710,13 +380,13 @@
   .rest-light-sweep {
     animation: none !important;
   }
+
   .rest-overlay.is-finished-effect .rest-ripple {
     animation: none !important;
     opacity: 0;
   }
+
   .rest-ring-progress {
     transition: none;
   }
 }
-
-
