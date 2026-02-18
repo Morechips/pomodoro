@@ -5,9 +5,9 @@ rem Launch index.html with Chromium autoplay policy to allow WebAudio on page op
 rem Use only on your own machine.
 rem
 rem Browser selection:
-rem   open.bat            -> default Edge
-rem   open.bat edge       -> force Edge
+rem   open.bat            -> default Chrome (fallback: Edge -> system default)
 rem   open.bat chrome     -> force Chrome
+rem   open.bat edge       -> force Edge
 rem   open.bat default    -> system default browser
 
 set "PAGE=%~dp0index.html"
@@ -18,7 +18,7 @@ if not exist "%PAGE%" (
 
 set "PAGE_URL=file:///%PAGE:\=/%"
 set "TARGET=%~1"
-if "%TARGET%"=="" set "TARGET=edge"
+if "%TARGET%"=="" set "TARGET=chrome"
 if /I "%TARGET%"=="help" goto :usage
 if /I "%TARGET%"=="/?" goto :usage
 if /I "%TARGET%"=="-h" goto :usage
@@ -79,7 +79,7 @@ echo   open.bat [edge^|chrome^|default]
 echo.
 echo Examples:
 echo   open.bat
-echo   open.bat edge
 echo   open.bat chrome
+echo   open.bat edge
 echo   open.bat default
 exit /b 1
